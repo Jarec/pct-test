@@ -1,19 +1,27 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import {computed, ref} from 'vue'
+
+const item = ref('')
+const items = ref([])
+const addItem = () => {
+  items.value.push(item.value)
+  item.value = ''
+}
+const itemEmpty = computed(() => item.value === '' || item.value === null)
 </script>
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
+    <input type="text"  v-model="item" placeholder="Item to add" />
+    <button @click="addItem" :disabled="itemEmpty">Add</button>
   </header>
 
   <main>
-    <TheWelcome />
+    <ul>
+      <li v-for="item in items" :key="item">
+        {{ item }}
+      </li>
+    </ul>
   </main>
 </template>
 
