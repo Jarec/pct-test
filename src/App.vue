@@ -1,19 +1,28 @@
 <script setup>
-import {computed, ref} from 'vue'
+import {computed, ref, onMounted} from 'vue'
+import {registerListener} from "@/scanner/scanner";
 
 const item = ref('')
 const items = ref([])
-const addItem = () => {
-  items.value.push(item.value)
-  item.value = ''
+const addItem = (value) => {
+  items.value.push(value)
 }
+
+const addItemAction = () => {
+  addItem(item.value)
+};
+
 const itemEmpty = computed(() => item.value === '' || item.value === null)
+
+onMounted(() => {
+  registerListener(addItem)
+})
 </script>
 
 <template>
   <header>
     <input type="text"  v-model="item" placeholder="Item to add" />
-    <button @click="addItem" :disabled="itemEmpty">Add</button>
+    <button @click="addItemAction" :disabled="itemEmpty">Add</button>
   </header>
 
   <main>
@@ -25,31 +34,3 @@ const itemEmpty = computed(() => item.value === '' || item.value === null)
   </main>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>
